@@ -23,11 +23,11 @@ LT: '<';
 LE: '<=';
 NEQ: '!=';
 
-// Expresiones logicas
+// Expresiones lógicas
 AND: '&&';
 OR: '||';
 
-// Aritmetica
+// Aritmética
 SUMA: '+';
 RESTA: '-';
 MULT: '*'; 
@@ -55,7 +55,7 @@ VAR: [a-zA-Z]+ ;
 // Skip
 WS : [ \t\n\r] -> skip;
 
-// Declaracion de entero, doble y bool en numeros
+// Declaración de entero, doble y bool en números
 ENTERO : DIGITO+ ;
 DOBLE: DIGITO+ '.' DIGITO+;
 BOOLEANO: ( TRUE | FALSE );
@@ -75,12 +75,7 @@ instruccion : declaracion PyC
             | asignacion_funcion
             ;
 
-declaracion: INT VAR concatenacion 
-            | DOUBLE VAR concatenacion 
-            | BOOL VAR concatenacion 
-            | INT asignacion concatenacion 
-            | DOUBLE asignacion concatenacion 
-            | BOOL asignacion concatenacion 
+declaracion: tipo_var VAR concatenacion 
             ;
 
 concatenacion: COM VAR concatenacion 
@@ -108,9 +103,9 @@ bucle_while: IWHILE PA cond PC bloque;
 
 condicional_if: IIF PA cond PC bloque;
 
-bucle_for: IFOR PA (declaracion PyC cond PyC post_pre_incremento ) PC bloque;
+bucle_for: IFOR PA declaracion cond PyC post_pre_incremento PC bloque;
 
-declaracion_funcion: tipo_var VAR PA declaracion_argumentos PC PyC;
+declaracion_funcion: tipo_var VAR PA declaracion_argumentos PC PyC bloque_funcion;
 
 declaracion_argumentos: tipo_var concatenacion_argumentos_declaracion;
 
@@ -120,10 +115,8 @@ concatenacion_argumentos_declaracion: COM declaracion_argumentos
 
 asignacion_funcion: tipo_var VAR PA asignacion_argumentos PC bloque_funcion;
 
-asignacion_argumentos: INT VAR concatenacion_argumentos_asignacion 
-                     | DOUBLE VAR concatenacion_argumentos_asignacion 
-                     | INT asignacion concatenacion_argumentos_asignacion 
-                     | DOUBLE asignacion concatenacion_argumentos_asignacion 
+asignacion_argumentos: tipo_var VAR concatenacion_argumentos_asignacion 
+                     | tipo_var asignacion concatenacion_argumentos_asignacion 
                      ;
 
 concatenacion_argumentos_asignacion: COM asignacion_argumentos
